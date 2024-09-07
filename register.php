@@ -2,19 +2,19 @@
     require_once 'config.php';
     require_once 'function.php';
 
-    if (isset($_GET['login']) && isset($_GET['password'])) {
+    if (isset($_POST['login']) && isset($_POST['password'])) {
         $data = $fileLoad();
         $data_url = '';
         if ($data) {
             // add new user
-            if (!isset($data[$_GET['login']])) {
-                $addUser($data, $_GET['login'], $_GET['password']);
+            if (!isset($data[$_POST['login']])) {
+                $addUser($data, $_POST['login'], $_POST['password']);
                 $filePut($data);    
             } else {
                 $data_url = 'error=this user login exist';
             }
         } else {
-            $addUser($data, $_GET['login'], $_GET['password']);
+            $addUser($data, $_POST['login'], $_POST['password']);
             $filePut($data);
         }
 
@@ -39,7 +39,7 @@
 </head>
 
 <body>
-    <form action="">        
+    <form action="" method="post">        
         <div>
             <label>
                 Логин:

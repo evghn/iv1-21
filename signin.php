@@ -3,15 +3,15 @@
     require_once 'function.php';
 
          
-    if (isset($_GET['login']) && isset($_GET['password'])) {
+    if (isset($_POST['login']) && isset($_POST['password'])) {
         $url_data = '';
         if ($data = $fileLoad()) {
-            if (isset($data[$_GET['login']])) {
-                $user = $data[$_GET['login']];
-                if (password_verify($_GET['password'], $user['password'])) {
+            if (isset($data[$_POST['login']])) {
+                $user = $data[$_POST['login']];
+                if (password_verify($_POST['password'], $user['password'])) {
                     $user['expire'] = time() + TOKEN_EXPIRE;
                     $user['token'] = $tokenCreate();
-                    $userUpdate($data, $_GET['login'], $user);
+                    $userUpdate($data, $_POST['login'], $user);
                     $url_data = 'token=' . $user['token'];
                 } else {
                     $url_data = 'error=user not found!';
@@ -35,7 +35,7 @@
     <title>Document</title>
 </head>
 <body>  
-        <form action="">           
+        <form action="" method="post">           
                 <div>
                     <label>
                         Логин:

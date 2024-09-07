@@ -1,6 +1,6 @@
 <?php
 
-    $tokenCreate = fn() => bin2hex(random_bytes(20));
+    $tokenCreate = fn() => bin2hex(random_bytes(200));
 
     $addUser = fn(array &$data, string $login, string $password) => 
         $data[$login] = [
