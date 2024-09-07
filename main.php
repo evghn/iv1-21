@@ -1,3 +1,6 @@
+<?php
+    require_once 'config.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +9,21 @@
     <title>Document</title>
 </head>
 <body>
+    <?php if (!$auth): ?>
+        <div>
+            <a href="signin.php">Авторизация</a>
+        </div>
+        <div>
+            <a href="register.php">Регистрация</a>
+        </div>
+    <?php else: ?>
+        <div>
+            Hello: <?= $auth['login'] ?>
+            <div><?php include 'logoutForm.php' ?></div>
+        </div>
+    <?php endif ?>    
     <div>
-        <a href="signin.php">Авторизация</a>
-    </div>
-    <div>
-        <a href="register.php">Регистрация</a>
+        <?= isset($_GET['error']) ? $_GET['error'] : '' ?>
     </div>
 </body>
 </html>

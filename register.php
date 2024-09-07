@@ -3,17 +3,27 @@
     require_once 'function.php';
 
     if (isset($_GET['login']) && isset($_GET['password'])) {
-        !file_exists(FILE_DB) && file_put_contents(FILE_DB, '');
-        
-        $data = json_decode(file_get_contents(FILE_DB), true);
+        $data = $fileLoad();
+        $data_url = '';
         if ($data) {
-
+            // add new user
+            if (!isset($data[$_GET['login']])) {
+                $addUser($data, $_GET['login'], $_GET['password']);
+                $filePut($data);    
+            } else {
+                $data_url = 'error=this user login exist';
+            }
         } else {
             $addUser($data, $_GET['login'], $_GET['password']);
-            file_put_contents(FILE_DB, json_encode($data));
+            $filePut($data);
         }
 
-        header('Location: ' . SCRIPT_MAIN);
+        header('Location: ' . SCRIPT_MAIN 
+            . ($data_url 
+                ? '?' . $data_url
+                : '' 
+            )
+    );
         exit;
     }
 

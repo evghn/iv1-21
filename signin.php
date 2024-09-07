@@ -1,41 +1,41 @@
 <?php
-    define('USER_PASSWORD', password_hash('123', PASSWORD_BCRYPT));
-    const USER_LOGIN = 'user';
-    $auth = isset($_GET['token']);
-      
-    if (isset($_GET['login']) && isset($_GET['password'])) {
-        if ($_GET['login'] == USER_LOGIN 
-            &&  password_verify($_GET['password'], USER_PASSWORD)) {
-                header('Location: ' 
-                    . $_SERVER['SCRIPT_NAME'] 
-                    . '?token=' . bin2hex(random_bytes(16)));
-                exit;
-            }
-        
-    } else {
-        if (isset($_GET['form-btn'])) {
-            header('Location: ' . $_SERVER['SCRIPT_NAME']);
-            exit;
-        }  
-    }
+    require_once 'config.php';
+    require_once 'function.php';
 
-    
+         
+    if (isset($_GET['login']) && isset($_GET['password'])) {
+        $url_data = '';
+        if ($data = $fileLoad()) {
+            if (isset($data[$_GET['login']])) {
+                $user = $data[$_GET['login']];
+                if (password_verify($_GET['password'], $user['password'])) {
+                    $user['expire'] = time() + TOKEN_EXPIRE;
+                    $user['token'] = $tokenCreate();
+                    $userUpdate($data, $_GET['login'], $user);
+                    $url_data = 'token=' . $user['token'];
+                } else {
+                    $url_data = 'error=user not found!';
+                }
+            } else {
+                $url_data = 'error=user not found!';
+            }
+        }       
+            
+        header('Location: ' 
+                . SCRIPT_MAIN 
+                . '?' . $url_data);
+        exit;
+    }    
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-
-<body>
-
-    <a href="<?= $_SERVER['SCRIPT_NAME']?>?param=2">link</a>
-    
-        <form action="">
-            <?php if (!$auth): ?>
+<body>  
+        <form action="">           
                 <div>
                     <label>
                         Логин:
@@ -48,17 +48,13 @@
                         <input type="text" name="password">
                     </label>
                 </div>
-            <?php endif ?>
+           
                 <div>
-                    <button type="submit" name='form-btn'>
-                        <?= $auth 
-                                ? "Выход"
-                                : "Войти"
-                        ?>
+                    <button type="submit" name='form-btn'>                        
+                        Войти                        
                     </button>
                 </div>            
         </form>
-    <a href="main.php">Назад</a>
+    <a href="<?= SCRIPT_MAIN ?>">Назад</a>
 </body>
-
 </html>
