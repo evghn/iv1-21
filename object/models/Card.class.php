@@ -8,7 +8,7 @@ class Card
     public string $expire = '';
     public string $owner = '';
     public string $type = '';
-    
+        
     
     private string $pin = '';
     private float $balance = 0;

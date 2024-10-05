@@ -1,6 +1,6 @@
 <?php
 
-class ATMv2 extends ATM
+class ATMv2 extends ATM implements INFCScan, IQR
 {
     public string $display = 'LED';
     public static $version = 'V2';
@@ -44,5 +44,16 @@ class ATMv2 extends ATM
     public static function getClassInfo()
     {
         return self::class;
+    }
+
+
+    public function nfcScan(object $card)
+    {
+        // nfc - ?
+    }
+
+    public function qrScan(object $card) 
+    {
+        
     }
 }

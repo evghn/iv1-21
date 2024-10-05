@@ -1,6 +1,6 @@
 <?php
 
-class ATM 
+class ATM
 {
     public int $cashValue = 1000000;
     public string $countryMade = '';
@@ -22,7 +22,6 @@ class ATM
     private ?object $card = null;
 
     private const TM = 'ATM Corp.';
-
 
     public function __construct(array $data = [])
     {

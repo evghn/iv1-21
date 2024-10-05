@@ -86,6 +86,26 @@ var_dump($atmV2->getCardBalance());
 var_dump($atmV2->issuingMoney(1200));
 var_dump($atmV2->issuingMoney(900));
 var_dump($atmV2->getCardBalance());
+
+$cardNfc = new CardNFC([    
+    'bankName' => 'Bank',
+    'expire' => '12/29',
+    'owner' => 'card holder',
+    'type' => 'mir',
+]);
+
+if ($atmV2 instanceof INFCScan && $cardNfc?->nfcMark) {
+    $atmV2->nfcScan($cardNfc);
+}
+
+
+if ($atmV2 instanceof IQR) {
+    $atmV2->qrScan($cardNfc); // 100%
+}
+
+
+
+
 // var_dump($atm, $atm2, $atmV2);
 // var_dump($atm->getOS(), $atm2->getOS(), $atmV2->getOS());
 // $atm2->ID = 'hack';
